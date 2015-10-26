@@ -16,3 +16,4 @@ Commands:
 * /film/{id}/cast
 * /film/{id}/keywords
 * /film/{id}/awards
+* /film/{id}/tracks
