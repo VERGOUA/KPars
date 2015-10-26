@@ -20,7 +20,8 @@ class Version20151026201819 extends AbstractMigration
               `id` INT PRIMARY KEY,
               `path` VARCHAR(255),
               `status` INT,
-              `html` MEDIUMBLOB
+              `html` MEDIUMBLOB,
+              `inserted` DATETIME
             );
         ');
     }
