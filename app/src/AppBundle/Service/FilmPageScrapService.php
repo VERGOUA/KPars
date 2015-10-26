@@ -55,10 +55,10 @@ class FilmPageScrapService
 
         while ($promises) {
             foreach ($promises as $key => $promise) {
-                $promise->wait();
-
                 if ($promise->getState() === PromiseInterface::FULFILLED) {
                     unset($promises[$key]);
+                } else {
+                    $promise->wait();
                 }
             }
         }
