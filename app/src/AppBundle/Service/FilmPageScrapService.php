@@ -20,13 +20,14 @@ class FilmPageScrapService
     public function scrap($limit)
     {
         $client = new Client([
-            'base_uri' => $this->url
+            'base_uri' => $this->url,
+            'allow_redirects' => false,
         ]);
 
         $id = $this->getNextId() ?: 1;
 
         while ($limit--) {
-            $path = "/film/$id";
+            $path = "/film/$id/";
 
             $data = [
                 'id' => $id,
