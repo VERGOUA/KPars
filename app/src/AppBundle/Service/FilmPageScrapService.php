@@ -8,9 +8,12 @@ class FilmPageScrapService
 {
     private $connection;
 
-    public function __construct(Connection $connection)
+    private $url;
+
+    public function __construct(Connection $connection, $url)
     {
         $this->connection = $connection;
+        $this->url = $url;
     }
 
     public function scrap($limit)
