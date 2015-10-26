@@ -26,6 +26,12 @@ class FilmPageScrapService
 
         $id = $this->getNextId() ?: 1;
 
+        $options = [
+            'headers' => [
+                'Accept-Encoding'	=> 'gzip, deflate',
+            ],
+        ];
+
         while ($limit--) {
             $path = "/film/$id/";
 
@@ -36,7 +42,7 @@ class FilmPageScrapService
             ];
 
             try {
-                $response = $client->get($path);
+                $response = $client->get($path, $options);
                 $data['html'] =  $response->getBody()->getContents();
                 $data['status'] =  $response->getStatusCode();
             } catch (\GuzzleHttp\Exception\ClientException $e) {
