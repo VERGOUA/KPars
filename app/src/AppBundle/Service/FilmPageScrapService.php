@@ -4,6 +4,8 @@ namespace AppBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use GuzzleHttp\Client;
+use GuzzleHttp\Promise\PromiseInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class FilmPageScrapService
 {
@@ -32,26 +34,33 @@ class FilmPageScrapService
             ],
         ];
 
+        /* @var $promises PromiseInterface[] */
+        $promises = [];
         while ($limit--) {
             $path = "/film/$id/";
 
-            $data = [
-                'id' => $id,
-                'path' => $path,
-                'inserted' => date('Y-m-d H:i:s')
-            ];
-
-            try {
-                $response = $client->get($path, $options);
-                $data['html'] =  $response->getBody()->getContents();
-                $data['status'] =  $response->getStatusCode();
-            } catch (\GuzzleHttp\Exception\ClientException $e) {
-                $data['status'] = $e->getCode();
-            }
-
-            $this->add($data);
-
+            $promises[] = $client
+                ->getAsync($path, $options)
+                ->then(function (ResponseInterface $response) use ($id, $path) {
+                    $this->add([
+                        'id' => $id,
+                        'path' => $path,
+                        'inserted' => date('Y-m-d H:i:s'),
+                        'html' => $response->getBody()->getContents(),
+                        'status' => $response->getStatusCode(),
+                    ]);
+                });
             ++$id;
+        }
+
+        while ($promises) {
+            foreach ($promises as $key => $promise) {
+                $promise->wait();
+
+                if ($promise->getState() === PromiseInterface::FULFILLED) {
+                    unset($promises[$key]);
+                }
+            }
         }
     }
 
