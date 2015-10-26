@@ -15,6 +15,7 @@ class FilmPageCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->getContainer()->get('kp.film_page_scrap')->scrap(1);
         $output->writeln('<info>OK</info>');
     }
 }

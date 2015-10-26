@@ -1,0 +1,4 @@
+services:
+  kp.film_page_scrap:
+    class: AppBundle\Service\FilmPageScrapService
+    arguments: [@doctrine.dbal.default_connection]
