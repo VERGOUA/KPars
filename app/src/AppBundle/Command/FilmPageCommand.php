@@ -12,7 +12,7 @@ class FilmPageCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('kp:scrap:filp:page')
+            ->setName('kp:scrap:film:page')
             ->addOption('limit', null, InputOption::VALUE_OPTIONAL);
     }
 
