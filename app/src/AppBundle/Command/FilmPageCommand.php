@@ -15,7 +15,14 @@ class FilmPageCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->getContainer()->get('kp.film_page_scrap')->scrap(3);
-        $output->writeln('<info>OK</info>');
+        $startTime = microtime(true);
+        $limit = 3;
+
+        $this->getContainer()->get('kp.film_page_scrap')->scrap($limit);
+
+        $duration = microtime(true) - $startTime;
+
+        $output->writeln("<info>Time: $duration</info>");
+        $output->writeln("<info>Count: $limit</info>");
     }
 }
