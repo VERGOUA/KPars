@@ -7,3 +7,10 @@
 
 Commands:
 * app/console kp:scrap:film:page --limit=10
+* 
+### TODO
+* /film/{id}/studio
+* /film/{id}/other
+* /film/{id}/dates
+* /film/{id}/cast
+* /film/{id}/keywords
