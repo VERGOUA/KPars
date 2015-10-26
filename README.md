@@ -17,3 +17,8 @@ Commands:
 * /film/{id}/keywords
 * /film/{id}/awards
 * /film/{id}/tracks
+* /film/{id}/sites
+* /name/{id}
+* /name/{id}/relations
+* /name/{id}/awards
+* /name/{id}/sites
