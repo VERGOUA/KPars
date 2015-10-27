@@ -12,6 +12,10 @@ services:
         class: AppBundle\Service\PageScrapService
         parent: kp.scrap_service
 
+    kp.sub_page_scrap:
+        class: AppBundle\Service\SubPageScrapService
+        parent: kp.scrap_service
+
     kp.cache_structure:
         class: AppBundle\Service\CacheStructureService
         arguments:

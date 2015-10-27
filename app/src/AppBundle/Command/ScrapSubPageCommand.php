@@ -21,6 +21,16 @@ class ScrapSubPageCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        dump($input->getArgument('root'), $input->getArgument('child'));
+        $root = $input->getArgument('root');
+        $child = $input->getArgument('child');
+        $startTime = microtime(true);
+        $limit = (int) $input->getOption('limit');
+
+        $this->getContainer()->get('kp.sub_page_scrap')->scrap($root, $child, $limit);
+
+        $duration = microtime(true) - $startTime;
+
+        $output->writeln("<info>Time: $duration</info>");
+        $output->writeln("<info>Count: $limit</info>");
     }
 }
