@@ -17,6 +17,18 @@ class ComplexCommand extends ContainerAwareCommand
     {
         $startTime = microtime(true);
 
+        $tables = $this->getContainer()->getParameter('tables');
+
+        foreach (array_keys($tables['root']) as $root) {
+            $output->writeln("<info>kp:scrap:page $root</info>");
+        }
+
+        foreach ($tables['child'] as $root => $tables) {
+            foreach (array_keys($tables) as $child) {
+                $output->writeln("<info>kp:scrap:sub:page $root $child</info>");
+            }
+        }
+
         $duration = microtime(true) - $startTime;
 
         $output->writeln("<info>Time: $duration</info>");
