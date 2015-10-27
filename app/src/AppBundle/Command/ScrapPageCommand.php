@@ -7,13 +7,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class FilmPageCommand extends ContainerAwareCommand
+class ScrapPageCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('kp:scrap:film:page')
-            ->addOption('limit', null, InputOption::VALUE_OPTIONAL);
+            ->setName('kp:scrap:page')
+            ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
