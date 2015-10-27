@@ -2,6 +2,7 @@ parameters:
     tables:
         root:
             films: s_films
+            names: s_names
         child:
             films:
                 studio: s_films_studio
@@ -13,3 +14,7 @@ parameters:
                 tracks: s_films_tracks
                 sites: s_films_sites
                 studio: s_films_studio
+            names:
+                relations: s_names_relations
+                awards: s_names_awards
+                sites: s_names_sites
