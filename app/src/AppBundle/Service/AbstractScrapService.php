@@ -86,7 +86,7 @@ abstract class AbstractScrapService
         }
     }
 
-    abstract function getPath($id);
+    abstract protected function getPath($id);
 
     abstract protected function getNext($limit);
 }
