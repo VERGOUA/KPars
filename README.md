@@ -6,8 +6,10 @@
 * PHPStorm (with plugins: Symfony, Twig )
 
 Commands:
-* app/console kp:scrap:film:page --limit=10
-
+* app/console kp:scrap:page
+Examples:
+* app/console kp:scrap:page film
+* app/console kp:scrap:page name --limit=10
 
 ### TODO
 * /film/{id}/studio

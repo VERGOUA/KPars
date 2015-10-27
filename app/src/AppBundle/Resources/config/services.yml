@@ -1,8 +1,13 @@
 services:
-  kp.film_page_scrap:
-    class: AppBundle\Service\FilmPageScrapService
-    arguments: [@doctrine.dbal.default_connection, %site_url%]
+  kp.page_scrap:
+    class: AppBundle\Service\PageScrapService
+    arguments:
+      - @doctrine.dbal.default_connection
+      - %tables%
+      - %site_url%
 
   kp.cache_structure:
       class: AppBundle\Service\CacheStructureService
-      arguments: [@doctrine.dbal.default_connection, %tables%]
+      arguments:
+        - @doctrine.dbal.default_connection
+        - %tables%

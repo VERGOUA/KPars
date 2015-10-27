@@ -7,20 +7,27 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class FilmPageScrapService
+class PageScrapService
 {
     private $connection;
 
     private $url;
 
-    public function __construct(Connection $connection, $url)
+    private $tables;
+
+    private $table;
+
+    public function __construct(Connection $connection, array $tables, $url)
     {
         $this->connection = $connection;
+        $this->tables = $tables;
         $this->url = $url;
     }
 
-    public function scrap($limit)
+    public function scrap($root, $limit)
     {
+        $this->table = $this->tables['root'][$root];
+
         $client = new Client([
             'base_uri' => $this->url,
             'allow_redirects' => false,
@@ -37,7 +44,7 @@ class FilmPageScrapService
         /* @var $promises PromiseInterface[] */
         $promises = [];
         while ($limit--) {
-            $path = "/film/$id/";
+            $path = "/$root/$id/";
 
             $promises[] = $client
                 ->getAsync($path, $options)
@@ -66,14 +73,14 @@ class FilmPageScrapService
 
     private function add(array $data)
     {
-        $this->connection->insert('s_films', $data);
+        $this->connection->insert($this->table, $data);
     }
 
     private function getNextId()
     {
         return $this->connection
             ->executeQuery("
-                SELECT MAX(`id`) + 1 FROM `s_films`;
+                SELECT MAX(`id`) + 1 FROM `{$this->table}`;
             ")
             ->fetchColumn();
     }
