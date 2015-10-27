@@ -22,3 +22,5 @@ Commands:
 * /name/{id}/relations
 * /name/{id}/awards
 * /name/{id}/sites
+
+* service for make tables
