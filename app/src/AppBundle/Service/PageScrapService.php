@@ -2,36 +2,17 @@
 
 namespace AppBundle\Service;
 
-use Psr\Http\Message\ResponseInterface;
-
 class PageScrapService extends AbstractScrapService
 {
+    private $root;
+
     public function scrap($root, $limit)
     {
         $this->table = $this->tables['root'][$root];
 
-        $client = $this->getClient();
+        $this->root = $root;
 
-        $options = $this->getAccessOptions();
-
-        $promises = [];
-        foreach ($this->getNext($limit) as $id) {
-            $path = "/$root/$id/";
-
-            $promises[] = $client
-                ->getAsync($path, $options)
-                ->then(function (ResponseInterface $response) use ($id, $path) {
-                    $this->add([
-                        'id' => $id,
-                        'path' => $path,
-                        'inserted' => date('Y-m-d H:i:s'),
-                        'html' => $response->getBody()->getContents(),
-                        'status' => $response->getStatusCode(),
-                    ]);
-                });
-        }
-
-        $this->wait($promises);
+        $this->process($limit);
     }
 
     protected function getNext($limit)
@@ -45,5 +26,10 @@ class PageScrapService extends AbstractScrapService
         while ($limit--) {
             yield ++$last;
         }
+    }
+
+    public function getPath($id)
+    {
+        return "/{$this->root}/$id/";
     }
 }

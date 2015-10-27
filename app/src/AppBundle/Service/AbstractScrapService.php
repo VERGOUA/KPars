@@ -5,8 +5,9 @@ namespace AppBundle\Service;
 use Doctrine\DBAL\Connection;
 use GuzzleHttp\Client;
 use GuzzleHttp\Promise\PromiseInterface;
+use Psr\Http\Message\ResponseInterface;
 
-class AbstractScrapService
+abstract class AbstractScrapService
 {
     protected $connection;
 
@@ -40,16 +41,40 @@ class AbstractScrapService
         ];
     }
 
+    protected function process($limit)
+    {
+        $client = $this->getClient();
+
+        $options = $this->getAccessOptions();
+
+        $promises = [];
+        foreach ($this->getNext($limit) as $id) {
+            $path = $this->getPath($id);
+
+            $promises[] = $client
+                ->getAsync($path, $options)
+                ->then(function (ResponseInterface $response) use ($id, $path) {
+                    $this->add([
+                        'id' => $id,
+                        'path' => $path,
+                        'inserted' => date('Y-m-d H:i:s'),
+                        'html' => $response->getBody()->getContents(),
+                        'status' => $response->getStatusCode(),
+                    ]);
+                });
+        }
+
+        $this->wait($promises);
+    }
+
     protected function add(array $data)
     {
         $this->connection->insert($this->table, $data);
     }
 
-    /**
-     * @param array PromiseInterface[]
-     */
     protected function wait(array $promises)
     {
+        /* @var $promises PromiseInterface[] */
         while ($promises) {
             foreach ($promises as $key => $promise) {
                 if ($promise->getState() === PromiseInterface::FULFILLED) {
@@ -60,4 +85,8 @@ class AbstractScrapService
             }
         }
     }
+
+    abstract function getPath($id);
+
+    abstract protected function getNext($limit);
 }

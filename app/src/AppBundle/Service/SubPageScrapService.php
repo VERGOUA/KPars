@@ -6,6 +6,6 @@ class SubPageScrapService extends AbstractScrapService
 {
     public function scrap($root, $child, $limit)
     {
-        dump($this->tables['child'][$root][$child]);
+        $this->table = $this->tables['child'][$root][$child];
     }
 }
