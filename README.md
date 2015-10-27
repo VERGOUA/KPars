@@ -11,6 +11,8 @@ Examples:
 * app/console kp:scrap:page film
 * app/console kp:scrap:page name --limit=10
 
+* app/console kp:scrap:sub:page film cast --limit=10
+
 ### TODO
 * /film/{id}/studio
 * /film/{id}/other
