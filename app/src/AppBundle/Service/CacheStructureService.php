@@ -8,18 +8,18 @@ class CacheStructureService
 {
     private $connection;
 
-    public function __construct(Connection $connection)
+    private $tables;
+
+    public function __construct(Connection $connection, array $tables)
     {
         $this->connection = $connection;
+
+        $this->tables = $tables;
     }
 
     public function create()
     {
-        $tables = [
-            's_films'
-        ];
-
-        foreach ($tables as $table) {
+        foreach ($this->getTables() as $table) {
             $this->connection->exec("
                 CREATE TABLE IF NOT EXISTS `$table` (
                   `id` INT PRIMARY KEY,
@@ -29,6 +29,19 @@ class CacheStructureService
                   `inserted` DATETIME
                 );
             ");
+        }
+    }
+
+    private function getTables()
+    {
+        foreach ($this->tables['root'] as $table) {
+            yield $table;
+        }
+
+        foreach ($this->tables['child'] as $name => $tables) {
+            foreach ($tables as $table) {
+                yield $table;
+            }
         }
     }
 }

@@ -5,4 +5,4 @@ services:
 
   kp.cache_structure:
       class: AppBundle\Service\CacheStructureService
-      arguments: [@doctrine.dbal.default_connection]
+      arguments: [@doctrine.dbal.default_connection, %tables%]

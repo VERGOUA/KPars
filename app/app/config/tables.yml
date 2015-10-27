@@ -1,0 +1,15 @@
+parameters:
+    tables:
+        root:
+            films: s_films
+        child:
+            films:
+                studio: s_films_studio
+                other: s_films_other
+                dates: s_films_dates
+                cast: s_films_cast
+                keywords: s_films_keywords
+                awards: s_films_awards
+                tracks: s_films_tracks
+                sites: s_films_sites
+                studio: s_films_studio
