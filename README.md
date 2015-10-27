@@ -16,18 +16,4 @@ Examples:
 * app/console kp:scrap:page name --limit=10
 * app/console kp:scrap:sub:page film cast --limit=10
 
-### TODO
-* /film/{id}/studio
-* /film/{id}/other
-* /film/{id}/dates
-* /film/{id}/cast
-* /film/{id}/keywords
-* /film/{id}/awards
-* /film/{id}/tracks
-* /film/{id}/sites
-* /name/{id}
-* /name/{id}/relations
-* /name/{id}/awards
-* /name/{id}/sites
-
-* service for make tables
+See page settings in `tables.yml`
