@@ -1,13 +1,19 @@
 services:
-  kp.page_scrap:
-    class: AppBundle\Service\PageScrapService
-    arguments:
-      - @doctrine.dbal.default_connection
-      - %tables%
-      - %site_url%
 
-  kp.cache_structure:
-      class: AppBundle\Service\CacheStructureService
-      arguments:
-        - @doctrine.dbal.default_connection
-        - %tables%
+    kp.scrap_service:
+        abstract: true
+        class: AppBundle\Service\AbstractScrapService
+        arguments:
+            - @doctrine.dbal.default_connection
+            - %tables%
+            - %site_url%
+
+    kp.page_scrap:
+        class: AppBundle\Service\PageScrapService
+        parent: kp.scrap_service
+
+    kp.cache_structure:
+        class: AppBundle\Service\CacheStructureService
+        arguments:
+            - @doctrine.dbal.default_connection
+            - %tables%

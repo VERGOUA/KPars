@@ -2,48 +2,20 @@
 
 namespace AppBundle\Service;
 
-use Doctrine\DBAL\Connection;
-use GuzzleHttp\Client;
-use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class PageScrapService
+class PageScrapService extends AbstractScrapService
 {
-    private $connection;
-
-    private $url;
-
-    private $tables;
-
-    private $table;
-
-    public function __construct(Connection $connection, array $tables, $url)
-    {
-        $this->connection = $connection;
-        $this->tables = $tables;
-        $this->url = $url;
-    }
-
     public function scrap($root, $limit)
     {
         $this->table = $this->tables['root'][$root];
 
-        $client = new Client([
-            'base_uri' => $this->url,
-            'allow_redirects' => false,
-        ]);
+        $client = $this->getClient();
 
-        $id = $this->getNextId() ?: 1;
+        $options = $this->getAccessOptions();
 
-        $options = [
-            'headers' => [
-                'Accept-Encoding'	=> 'gzip, deflate',
-            ],
-        ];
-
-        /* @var $promises PromiseInterface[] */
         $promises = [];
-        while ($limit--) {
+        foreach ($this->getNext($limit) as $id) {
             $path = "/$root/$id/";
 
             $promises[] = $client
@@ -57,31 +29,21 @@ class PageScrapService
                         'status' => $response->getStatusCode(),
                     ]);
                 });
-            ++$id;
         }
 
-        while ($promises) {
-            foreach ($promises as $key => $promise) {
-                if ($promise->getState() === PromiseInterface::FULFILLED) {
-                    unset($promises[$key]);
-                } else {
-                    $promise->wait();
-                }
-            }
-        }
+        $this->wait($promises);
     }
 
-    private function add(array $data)
+    protected function getNext($limit)
     {
-        $this->connection->insert($this->table, $data);
-    }
-
-    private function getNextId()
-    {
-        return $this->connection
+        $last = $this->connection
             ->executeQuery("
-                SELECT MAX(`id`) + 1 FROM `{$this->table}`;
+                SELECT MAX(`id`) FROM `{$this->table}`;
             ")
             ->fetchColumn();
+
+        while ($limit--) {
+            yield ++$last;
+        }
     }
 }
