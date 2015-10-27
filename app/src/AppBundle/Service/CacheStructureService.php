@@ -15,14 +15,20 @@ class CacheStructureService
 
     public function create()
     {
-        $this->connection->exec('
-            CREATE TABLE IF NOT EXISTS `s_films` (
-              `id` INT PRIMARY KEY,
-              `path` VARCHAR(255),
-              `status` INT,
-              `html` MEDIUMBLOB,
-              `inserted` DATETIME
-            );
-        ');
+        $tables = [
+            's_films'
+        ];
+
+        foreach ($tables as $table) {
+            $this->connection->exec("
+                CREATE TABLE IF NOT EXISTS `$table` (
+                  `id` INT PRIMARY KEY,
+                  `path` VARCHAR(255),
+                  `status` INT,
+                  `html` MEDIUMBLOB,
+                  `inserted` DATETIME
+                );
+            ");
+        }
     }
 }
