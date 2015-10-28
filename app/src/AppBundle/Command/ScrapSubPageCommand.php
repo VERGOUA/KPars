@@ -16,7 +16,7 @@ class ScrapSubPageCommand extends ContainerAwareCommand
             ->setName('kp:scrap:sub:page')
             ->addArgument('root', InputArgument::REQUIRED)
             ->addArgument('child', InputArgument::REQUIRED)
-            ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL);
+            ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'l', 10);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
