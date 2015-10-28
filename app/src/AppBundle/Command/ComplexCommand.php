@@ -19,14 +19,19 @@ class ComplexCommand extends ContainerAwareCommand
 
         $tables = $this->getContainer()->getParameter('tables');
 
+        $commands = [];
         foreach (array_keys($tables['root']) as $root) {
-            $output->writeln("<info>kp:scrap:page $root</info>");
+            $commands[] = "kp:scrap:page $root";
         }
 
         foreach ($tables['child'] as $root => $tables) {
             foreach (array_keys($tables) as $child) {
-                $output->writeln("<info>kp:scrap:sub:page $root $child</info>");
+                $commands[] = "kp:scrap:sub:page $root $child";
             }
+        }
+
+        foreach ($commands as $command) {
+            $output->writeln("<info>$command</info>");
         }
 
         $duration = microtime(true) - $startTime;
