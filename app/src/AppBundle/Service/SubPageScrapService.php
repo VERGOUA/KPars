@@ -33,6 +33,7 @@ class SubPageScrapService extends AbstractScrapService
             WHERE `id` NOT IN (
               SELECT `id` FROM `$child`
             )
+            AND `status` = 200
             LIMIT $limit;
         ");
 
