@@ -5,6 +5,7 @@ namespace AppBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 
 class ComplexCommand extends ContainerAwareCommand
 {
@@ -30,8 +31,25 @@ class ComplexCommand extends ContainerAwareCommand
             }
         }
 
+        $commands = [array_shift($commands)];
+        /* @var $processes Process[] */
+        $processes = [];
         foreach ($commands as $command) {
-            $output->writeln("<info>$command</info>");
+            $processes[$command] = $process = new Process("app/console $command");
+            $output->writeln("<info>$command start</info>");
+            $process->start();
+        }
+
+        while (true) {
+            foreach ($processes as $command => $process) {
+                if ($process->isRunning()) {
+                    $output->writeln("Running $command: <info>{$process->getPid()}</info>");
+                } else {
+                    $output->writeln($process->getOutput());
+                    $processes[$command] = $process->restart();
+                }
+                sleep(1);
+            }
         }
 
         $duration = microtime(true) - $startTime;
