@@ -55,10 +55,10 @@ class ComplexCommand extends ContainerAwareCommand
                 }
                 sleep(1);
             }
+
+            $duration = microtime(true) - $startTime;
+
+            $output->writeln("<info>Time: $duration</info>");
         }
-
-        $duration = microtime(true) - $startTime;
-
-        $output->writeln("<info>Time: $duration</info>");
     }
 }
